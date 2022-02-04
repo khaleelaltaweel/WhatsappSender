@@ -5,9 +5,5 @@
 - 📫 How to reach me  --> khaleeltwl@gmail.com
 
 <!---
-
-khaleelaltaweel/khaleelaltaweel is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
-
-
+**Through the page, you can write the phone number and send him a message via WhatsApp without storing his number by following the link**
 --->
