@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>WhatsApp Sender</title>
+    <link rel="stylesheet" href="css/intlTelInput.min.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+
+      body {
+        padding: 10px;
+        min-height: 100vh;
+        font-family: Helvetica, Arial, sans-serif;
+      }
+
+      .flexColumn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .header-logo {
+        height: auto;
+        width: 20%;
+      }
+
+      .description {
+        text-align: center;
+        font-size: 0.9em;
+        font-weight: lighter;
+        margin-top: 0;
+      }
+
+      .input {
+        width: 90%;
+        height: 2em;
+        font-size: 2em;
+        text-align: center;
+        border: 1px solid #6767674a;
+        border-radius: 2em;
+        box-shadow: 0 3px 6px 1px #adadad;
+      }
+
+      #submitBtn {
+        background: linear-gradient(#00e870, #00ea7c);
+        color: white;
+        margin-top: 20px;
+      }
+
+      form {
+        margin-top: 1%;
+      }
+
+      #hint {
+        text-align: center;
+        color: gray;
+      }
+
+      .intl-tel-input {
+        text-align: center;
+      }
+
+      .intl-tel-input.allow-dropdown .flag-container {
+        left: 20px;
+      }
+      
+      .intl-tel-input.separate-dial-code .selected-flag,
+      .intl-tel-input.allow-dropdown .flag-container:hover .selected-flag {
+        background-color: transparent;
+      }
+      .intl-tel-input .selected-flag .iti-arrow {
+        right: -1px;
+      }
+
+      footer {
+        margin-bottom: 95px;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-evenly;
+      }
+      footer a {
+        display: flex;
+        align-items: center;
+        color: #2f4438;
+        text-decoration: none;
+      }
+      footer a img {
+        height: 17px;
+      }
+      footer a span {
+        padding-top: 1px;
+      }
+    </style>
+  </head>
+
+  <body class="flexColumn" style="justify-content: space-between;">
+    <main>
+      <header class="flexColumn">
+        <img src="./img/whatsapp.svg" alt="whatsapp logo" class="header-logo" />
+        <h2 class="description">
+          Send message on Whatsapp to any new number without saving it
+        </h2>
+      </header>
+      <form action="#" onsubmit="return window.sendMessage(event)">
+        <div class="flexColumn">
+          <input type="tel" id="numberInput" class="input" required />
+          <p id="hint">Please enter a number</p>
+          <input type="submit" id="submitBtn" value="Start!" class="input" />
+        </div>
+      </form>
+    </main>
+
+    <footer>
+      <a href="https://twitter.com/a_rahmanshah"
+        ><img src="./img/phone-call.png" alt="phone call" srcset="" />
+        <span>اتصل بنا </span></a
+      >
+      <a href="privacy-policy.html"
+        ><img src="./img/privacy-policy.png" alt="privacy policy" srcset="" />
+        <span>سياسة الخصوصية</span></a
+      >
+    </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/intlTelInput.min.js"></script>
+    <script>
+      var intlNumber;
+      $("#numberInput").intlTelInput({
+        initialCountry: "auto",
+        separateDialCode: true,
+        geoIpLookup: function(callback) {
+          $.get("https://ipinfo.io", function() {}, "jsonp").always(function(
+            resp
+          ) {
+            var countryCode = resp && resp.country ? resp.country : "";
+            callback(countryCode);
+          });
+        },
+        utilsScript: "./js/utils.js" // just for formatting/placeholders etc
+      });
+
+      $("#numberInput").on("keyup change", function() {
+        intlNumber = $("#numberInput").intlTelInput("getNumber");
+        if (intlNumber) {
+          $("#hint").text(intlNumber);
+        } else {
+          intlNumber = null;
+          $("#hint").text("Please enter a number");
+        }
+        $("#numberInput").value = $("#numberInput").intlTelInput(
+          "getSelectedCountryData"
+        ).dialCode;
+      });
+
+      window.sendMessage = function(e) {
+        e.preventDefault();
+        window.open(
+          "https://api.whatsapp.com/send?phone=" + intlNumber.replace("+", "")
+        );
+      };
+      console.log(
+        "Hello there"
+      );
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-123143004-1"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "UA-123143004-1");
+    </script>
+  </body>
+</html>
